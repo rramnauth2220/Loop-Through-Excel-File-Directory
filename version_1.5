@@ -1,0 +1,151 @@
+Sub LoopAllExcelFilesInFolder()
+'Loop through all Excel files in a specified folder and applies format criteria
+
+Dim wb As Workbook
+Dim myPath As String
+Dim myFile As String
+Dim myExtension As String
+Dim FldrPicker As FileDialog
+
+'Macro speed optimization
+  Application.ScreenUpdating = False
+  Application.EnableEvents = False
+  Application.Calculation = xlCalculationManual
+
+'Retrieve from folder_picker target folder path
+  Set FldrPicker = Application.FileDialog(msoFileDialogFolderPicker)
+
+    With FldrPicker
+      .Title = "Select A Target Folder"
+      .AllowMultiSelect = False
+        If .Show <> -1 Then GoTo NextCode
+        myPath = .SelectedItems(1) & "\"
+    End With
+
+'If user suddenly cancels
+NextCode:
+  myPath = myPath
+  If myPath = "" Then GoTo ResetSettings
+
+'Exclude to file extension (alternate: *.xlx*)
+  myExtension = "*.xlsx"
+
+'Target Path with Ending Extention
+  myFile = Dir(myPath & myExtension)
+
+'Loop through each Excel file in folder
+  Do While myFile <> ""
+    'Set variable equal to opened workbook
+    Set wb = Workbooks.Open(Filename:=myPath & myFile)
+    
+    'Ensure Workbook has opened before moving on to next line of code
+    DoEvents
+    
+    'Change
+    Columns("B:C").Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
+    Columns("E:F").Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
+    Columns("H:I").Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
+    Columns("K:L").Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
+    Columns("N:O").Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
+    Columns("Q:R").Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
+    
+    Range("R6").FormulaR1C1 = "Citation"
+    Range("Q6").FormulaR1C1 = "Requirement"
+    Range("O6").FormulaR1C1 = "Section Subject"
+    Range("N6").FormulaR1C1 = "Section No."
+    Range("L6").FormulaR1C1 = "Article Subject"
+    Range("K6").FormulaR1C1 = "Article No."
+    Range("I6").FormulaR1C1 = "Subchapter Subject"
+    Range("H6").FormulaR1C1 = "Subchapter No."
+    Range("F6").FormulaR1C1 = "Chapter Subject"
+    Range("E6").FormulaR1C1 = "Chapter No."
+    Range("C6").FormulaR1C1 = "Title Subject"
+    Range("B6").FormulaR1C1 = "Title No."
+    
+    Range("B7").FormulaR1C1 = _
+        "= IF(ISERROR(LEFT(RIGHT(RC[2], LEN(RC[2]) - MIN(FIND({0,1,2,3,4,5,6,7,8,9}, RC[2] & ""0123456789""))+1), SEARCH("":"", RIGHT(RC[2], LEN(RC[2]) - MIN(FIND({0,1,2,3,4,5,6,7,8,9}, RC[2] & ""0123456789""))+1), 1)-1)), """", LEFT(RIGHT(RC[2], LEN(RC[2]) - MIN(FIND({0,1,2,3,4,5,6,7,8,9}, RC[2] & ""0123456789""))+1), SEARCH("":"", RIGHT(RC[2], LEN(RC[2]) - MIN(FIND({0,1,2," & _
+        "3,4,5,6,7,8,9}, RC[2] & ""0123456789""))+1), 1)-1))" & _
+        ""
+    Range("C7").FormulaR1C1 = _
+        "= IF(ISERROR(MID(RC[1], SEARCH("": "", RC[1], 1) + 2, LEN(RC[1]) - SEARCH("" "", RC[1], 1))), """", MID(RC[1], SEARCH("": "", RC[1], 1) + 2, LEN(RC[1]) - SEARCH("" "", RC[1], 1)))"
+    Range("E7").FormulaR1C1 = _
+        "= IF(ISERROR(LEFT(RIGHT(RC[2], LEN(RC[2]) - MIN(FIND({0,1,2,3,4,5,6,7,8,9}, RC[2] & ""0123456789""))+1), SEARCH("":"", RIGHT(RC[2], LEN(RC[2]) - MIN(FIND({0,1,2,3,4,5,6,7,8,9}, RC[2] & ""0123456789""))+1), 1)-1)), """", LEFT(RIGHT(RC[2], LEN(RC[2]) - MIN(FIND({0,1,2,3,4,5,6,7,8,9}, RC[2] & ""0123456789""))+1), SEARCH("":"", RIGHT(RC[2], LEN(RC[2]) - MIN(FIND({0,1,2," & _
+        "3,4,5,6,7,8,9}, RC[2] & ""0123456789""))+1), 1)-1))" & _
+        ""
+    Range("F7").FormulaR1C1 = _
+        "= IF(ISERROR(MID(RC[1], SEARCH("": "", RC[1], 1) + 2, LEN(RC[1]) - SEARCH("" "", RC[1], 1))), """", MID(RC[1], SEARCH("": "", RC[1], 1) + 2, LEN(RC[1]) - SEARCH("" "", RC[1], 1)))"
+    Range("H7").FormulaR1C1 = _
+        "= IF(ISERROR(LEFT(RIGHT(RC[2], LEN(RC[2]) - MIN(FIND({0,1,2,3,4,5,6,7,8,9}, RC[2] & ""0123456789""))+1), SEARCH("":"", RIGHT(RC[2], LEN(RC[2]) - MIN(FIND({0,1,2,3,4,5,6,7,8,9}, RC[2] & ""0123456789""))+1), 1)-1)), """", LEFT(RIGHT(RC[2], LEN(RC[2]) - MIN(FIND({0,1,2,3,4,5,6,7,8,9}, RC[2] & ""0123456789""))+1), SEARCH("":"", RIGHT(RC[2], LEN(RC[2]) - MIN(FIND({0,1,2," & _
+        "3,4,5,6,7,8,9}, RC[2] & ""0123456789""))+1), 1)-1))" & _
+        ""
+    Range("I7").FormulaR1C1 = _
+        "= IF(ISERROR(MID(RC[1], SEARCH("": "", RC[1], 1) + 2, LEN(RC[1]) - SEARCH("" "",RC[1], 1))), """", MID(RC[1], SEARCH("": "", RC[1], 1) + 2, LEN(RC[1]) - SEARCH("" "",RC[1], 1)))"
+    Range("K7").FormulaR1C1 = _
+        "= IF(ISERROR(LEFT(RIGHT(RC[2], LEN(RC[2]) - MIN(FIND({0,1,2,3,4,5,6,7,8,9}, RC[2] & ""0123456789""))+1), SEARCH("":"", RIGHT(RC[2], LEN(RC[2]) - MIN(FIND({0,1,2,3,4,5,6,7,8,9}, RC[2] & ""0123456789""))+1), 1)-1)), """", LEFT(RIGHT(RC[2], LEN(RC[2]) - MIN(FIND({0,1,2,3,4,5,6,7,8,9}, RC[2] & ""0123456789""))+1), SEARCH("":"", RIGHT(RC[2], LEN(RC[2]) - MIN(FIND({0,1,2," & _
+        "3,4,5,6,7,8,9}, RC[2] & ""0123456789""))+1), 1)-1))" & _
+        ""
+    Range("L7").FormulaR1C1 = _
+        "= IF(ISERROR(MID(RC[1], SEARCH("": "", RC[1], 1) + 2, LEN(RC[1]) - SEARCH("" "",RC[1], 1))), """", MID(RC[1], SEARCH("": "", RC[1], 1) + 2, LEN(RC[1]) - SEARCH("" "",RC[1], 1)))"
+    Range("N7").FormulaR1C1 = _
+        "= IF(ISERROR(LEFT(RIGHT(RC[2], LEN(RC[2]) - MIN(FIND({0,1,2,3,4,5,6,7,8,9}, RC[2] & ""0123456789""))+1), SEARCH("" "", RIGHT(RC[2], LEN(RC[2]) - MIN(FIND({0,1,2,3,4,5,6,7,8,9}, RC[2] & ""0123456789""))+1), 1)-1)), """", LEFT(RIGHT(RC[2], LEN(RC[2]) - MIN(FIND({0,1,2,3,4,5,6,7,8,9}, RC[2] & ""0123456789""))+1), SEARCH("" "", RIGHT(RC[2], LEN(RC[2]) - MIN(FIND({0,1,2," & _
+        "3,4,5,6,7,8,9}, RC[2] & ""0123456789""))+1), 1)-1))" & _
+        ""
+    Range("O7").FormulaR1C1 = _
+        "= IF(ISERROR(MID(RC[1], FIND("" "",RC[1],FIND("" "",RC[1])+1) + 1, IF(ISERROR(FIND(""]"", RC[1], 1)), FIND(""."", RC[1], 1), FIND(""]"", RC[1], 1)) - FIND("" "",RC[1],FIND("" "",RC[1])+1))), """", MID(RC[1], FIND("" "",RC[1],FIND("" "",RC[1])+1) + 1, IF(ISERROR(FIND(""]"", RC[1], 1)), FIND(""."", RC[1], 1), FIND(""]"", RC[1], 1)) - FIND("" "",RC[1],FIND("" "",RC[1])+1)))"
+    Range("Q7").FormulaR1C1 = _
+        "= IF(ISERROR(MID(RC[2], MIN(INDEX(ROW(INDIRECT(""1:""&LEN(RC[2])))+((CODE(MID(UPPER(RC[2]),ROW(INDIRECT(""1:""&LEN(RC[2]))),1))<48)+(CODE(MID(UPPER(RC[2]),ROW(INDIRECT(""1:""&LEN(RC[2]))),1))>122))*1E+99,,)), LEN(RC[2]))), """", MID(RC[2], MIN(INDEX(ROW(INDIRECT(""1:""&LEN(RC[2])))+((CODE(MID(UPPER(RC[2]),ROW(INDIRECT(""1:""&LEN(RC[2]))),1))<48)+(CODE(MID(UPPER(RC[2" & _
+        "]),ROW(INDIRECT(""1:""&LEN(RC[2]))),1))>122))*1E+99,,)), LEN(RC[2])))" & _
+        ""
+    Range("R7").FormulaR1C1 = "= CONCAT(RC[-16], "" RCNY §"", RC[-4])"
+    
+    lastRow = Range("A" & Rows.Count).End(xlUp).Row
+    
+    Range("B7").AutoFill Destination:=Range("B7:B" & lastRow)
+    Range("C7").AutoFill Destination:=Range("C7:C" & lastRow)
+    Range("E7").AutoFill Destination:=Range("E7:E" & lastRow)
+    Range("F7").AutoFill Destination:=Range("F7:F" & lastRow)
+    Range("H7").AutoFill Destination:=Range("H7:H" & lastRow)
+    Range("I7").AutoFill Destination:=Range("I7:I" & lastRow)
+    Range("K7").AutoFill Destination:=Range("K7:K" & lastRow)
+    Range("L7").AutoFill Destination:=Range("L7:L" & lastRow)
+    Range("N7").AutoFill Destination:=Range("N7:N" & lastRow)
+    Range("O7").AutoFill Destination:=Range("O7:O" & lastRow)
+    Range("Q7").AutoFill Destination:=Range("Q7:Q" & lastRow)
+    Range("R7").AutoFill Destination:=Range("R7:R" & lastRow)
+    
+    Range("D1:D4").Cut
+    Range("E1").Select
+    ActiveSheet.Paste
+    Range("G1:G4").Cut
+    Range("F1").Select
+    ActiveSheet.Paste
+    
+    Columns("D:D").EntireColumn.Hidden = True
+    Columns("G:G").EntireColumn.Hidden = True
+    Columns("J:J").EntireColumn.Hidden = True
+    Columns("M:M").EntireColumn.Hidden = True
+    Columns("P:P").EntireColumn.Hidden = True
+    Columns("S:S").EntireColumn.Hidden = True
+    
+    ActiveSheet.Range("A:T").EntireColumn.AutoFit
+    
+    'Save and Close Workbook
+    wb.Close SaveChanges:=True
+      
+    'Ensure Workbook has closed before moving on to next line of code
+    DoEvents
+
+    'Get next file name
+    myFile = Dir
+  Loop
+
+'Alert when task is complete
+  MsgBox "Hooray! All files in this directory have been reformatted and cleaned"
+
+ResetSettings:
+  'Reset Macro Optimization Settings
+    Application.EnableEvents = True
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+
+End Sub
